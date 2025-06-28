@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 import time
 import requests
+import secrets
 
 app = Flask(__name__)
 
@@ -38,7 +39,7 @@ def login():
     if not user or user['password'] != request.json['password']:
         return jsonify({'error': 'Invalid username or password'}), 401
 
-    token = f"token_{user['id']}"
+    token = secrets.token_hex(16)
     expires = time.time() + TOKEN_EXPIRATION_SECONDS
     tokens[token] = {"user_id": user['id'], "expires": expires}
 
